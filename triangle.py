@@ -18,5 +18,5 @@ class Solution:
                 else:
                     f[idx] = min(tmp[idx], tmp[idx-1])+triangle[i][idx]
 
-        return max(f)
+        return min(f)
                 
