@@ -46,6 +46,7 @@ class heap():
         res = self.heap[0]
         if len(self.heap)<3:
             self.heap = self.heap[1:]
+            return res
             
         # swap root and last element    
         self.heap[0],self.heap[-1] = self.heap[-1], self.heap[0]
@@ -53,21 +54,40 @@ class heap():
         
         i = 0
         if self.heapType=='min':
-            while (2*i+1<len(self.heap) and self.heap[i]>self.heap[2*i+1]) or (2*i+2<len(self.heap) and self.heap[i]>self.heap[i*2+2]):
-                if self.heap[2*i+1] < self.heap[2*i+2]:
-                    self.heap[i], self.heap[2*i+1] = self.heap[2*i+1], self.heap[i]
-                    i = 2*i+1
+            while 2*i+1<len(self.heap):
+                if 2*i+2<len(self.heap):
+                    if self.heap[i] < self.heap[2*i+2] and self.heap[i] < self.heap[2*i+1]:
+                        break
+                    elif self.heap[2*i+2]< self.heap[2*i+1]:
+                        self.heap[i], self.heap[2*i+2] = self.heap[2*i+2], self.heap[i]
+                        i = 2*i+2
+                    else:
+                        self.heap[i], self.heap[2*i+1] = self.heap[2*i+1], self.heap[i]
+                        i = 2*i+1
                 else:
-                    self.heap[i], self.heap[2*i+2] = self.heap[2*i+2], self.heap[i]
-                    i = 2*i+2
+                    if self.heap[i] < self.heap[2*i+1]:
+                        break
+                    else:
+                        self.heap[i], self.heap[2*i+1] = self.heap[2*i+1], self.heap[i]
+                        i = 2*i+1
+                    
         if self.heapType=='max':
-            while (2*i+1<len(self.heap) and self.heap[i]<self.heap[2*i+1]) or (2*i+2<len(self.heap) and self.heap[i]<self.heap[i*2+2]):
-                if self.heap[2*i+1] > self.heap[2*i+2]:
-                    self.heap[i], self.heap[2*i+1] = self.heap[2*i+1], self.heap[i]
-                    i = 2*i+1
+            while 2*i+1<len(self.heap):
+                if 2*i+2<len(self.heap):
+                    if self.heap[i] > self.heap[2*i+2] and self.heap[i] > self.heap[2*i+1]:
+                        break
+                    elif self.heap[2*i+2] > self.heap[2*i+1]:
+                        self.heap[i], self.heap[2*i+2] = self.heap[2*i+2], self.heap[i]
+                        i = 2*i+2
+                    else:
+                        self.heap[i], self.heap[2*i+1] = self.heap[2*i+1], self.heap[i]
+                        i = 2*i+1
                 else:
-                    self.heap[i], self.heap[2*i+2] = self.heap[2*i+2], self.heap[i]
-                    i = 2*i+2
+                    if self.heap[i] > self.heap[2*i+1]:
+                        break
+                    else:
+                        self.heap[i], self.heap[2*i+1] = self.heap[2*i+1], self.heap[i]
+                        i = 2*i+1
         
         return res
 
@@ -99,18 +119,23 @@ class medStream():
                 self.maxHeap.heapify(newNum)
             else:
                 self.minHeap.heapify(newNum)
-    
+        
         sizeDiff = self.maxHeap.getSize()-self.minHeap.getSize()
         if sizeDiff==0:
             return (self.maxHeap.getTop()+self.minHeap.getTop())/2.
+        if sizeDiff==-1:
+            return self.minHeap.getTop()
+        if sizeDiff==1:
+            return self.maxHeap.getTop() 
+        
+        # resize two heaps   
         if sizeDiff<-1:
             self.maxHeap.heapify(self.minHeap.extractM())
-            return self.minHeap.getTop()
         elif sizeDiff>1:
             self.minHeap.heapify(self.maxHeap.extractM())
-            return self.maxHeap.getTop()
+        return (self.maxHeap.getTop()+self.minHeap.getTop())/2.
 
 test = medStream()
 for elem in [5, 15, 1, 3]:
-    print test.getMed()
+    print test.getMed(elem)
            
