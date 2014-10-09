@@ -5,6 +5,8 @@
 # 4. construct signature matrix, whose columns represent the sets and rows represent the minhash values, in order of that column
 # Property: the probability (over all permutations of the rows) that h(C1)=H(C2) for example is the same as Jaccard similarity Sim(C1, C2)
 
+import sys
+
 # generate the k-th permutation of sequence [0, 1, ...,n-1]
 # @param n: an int  
 # @param k: an int
@@ -53,8 +55,27 @@ def minHash0(m, ncol1, ncol2):
     b = [sigM[i][ncol2] for i in range(f)]
 
     return 1.*sum([a[i]==b[i] for i in range(f)])/f
-                 
 
+
+# a good approximation to permutation minhash: pick a number of hash functions; for each column col and each function h_i keep track of the M(i,col) signature value 
+# @param m: a 2d list
+# @param ncol1, ncol2: two int representing column index
+# @return a float
+# @param funcs: a list of functions                
+def minHash(m, ncol1, ncol2, funcs):
+    nrow, nfunc = len(m), len(funcs)
+    sig1, sig2 = [sys.maxint for i in range(nfunc)], [sys.maxint for i in range(nfunc)]
+    
+    for i in range(nrow):
+        for j in range(nfunc):
+            tmp = funcs[j](i)
+            if m[i][ncol1]:
+                sig1[j] = min(sig1[j],tmp)
+            if m[i][ncol2]:
+                sig2[j] = min(sig2[j],tmp)
+    
+    return 1.*sum([sig1[i]==sig2[i] for i in range(nfunc)])/nfunc
+   
 # test0
 f = factorial(3-1)
 for i in range(6):
@@ -65,3 +86,13 @@ m = [[1,0,1,0], [1,0,0,1], [0,1,0,1], [0,1,0,1],[0,1,0,1],[1,0,1,0],[1,0,1,0]]
 print minHash0(m, 0, 2)
 print minHash0(m, 1, 3)
 print minHash0(m, 0, 1)
+
+# test2, sketchy
+def h(x):   return (x+1)%5
+def g(x):   return (2*x+3)%5
+funcs = [h, g]
+mm = [[1,0],[0,1],[1,1],[1,0],[0,1]]
+print minHash(mm,0,1,funcs)
+print minHash(m, 0, 2,funcs)
+print minHash(m, 1, 3,funcs)
+print minHash(m, 0, 1,funcs)
