@@ -1,6 +1,11 @@
+import string
+
 class Node:
     def __init__(self):
-        self.next = [None for i in range(26)]
+        d = {}
+        for c in string.ascii_lowercase:
+            d[c] = None
+        self.next = d
         self.val = False
 
 class Rtrie:
@@ -27,7 +32,7 @@ class Rtrie:
             node.val = val
             return node
         c = key[d]
-        node.next[c] = self.put(node.next[c],key, val, d+1) 
+        node.next[c] = self.putHelper(node.next[c],key, val, d+1) 
         return node       
 
     def put(self, key, val):
@@ -43,9 +48,10 @@ class Rtrie:
         if not node:
             return None
         if d==len(key):
-            return x
+            return node 
         c = key[d]
-        return self.get(node.next[c], key, d+1)
+        return self.getHelper(node.next[c], key, d+1)
+
     def get(self, key):
         node = self.getHelper(self.root, key, 0)
         if not node:
@@ -54,3 +60,6 @@ class Rtrie:
 
     def contains(self, key):
         return self.get(key)!=None 
+
+R = Rtrie()
+R.put('abc', 'chicky buggie bone')
