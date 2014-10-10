@@ -75,7 +75,8 @@ def minHash(m, ncol1, ncol2, funcs):
                 sig2[j] = min(sig2[j],tmp)
     
     return 1.*sum([sig1[i]==sig2[i] for i in range(nfunc)])/nfunc
-   
+
+
 # test0
 f = factorial(3-1)
 for i in range(6):
@@ -96,3 +97,36 @@ print minHash(mm,0,1,funcs)
 print minHash(m, 0, 2,funcs)
 print minHash(m, 1, 3,funcs)
 print minHash(m, 0, 1,funcs)
+
+
+# generate a function that helps tweak locality sensitivity hashing parameters
+# @param s: a float representing daccard similarity between two columns of a signature matrix
+# @param b: an int representing bucket size
+# @param r: an int representing row size of a band
+# @returns the probability that identical columns are grouped together 
+def LSHparam(self, s, b, r):
+        return 1-(1-s**r)**b
+
+# # locality sensitive hashing framework
+# class LSH:
+#     def __init__(self,s,b,r):
+#         self.s = s  # daccard similarity
+#         self.b = b  # band size
+#         self.r = r  # number of rows in each band
+#         self.M = [] # signature matrix
+#
+#     # generate shorter signatures to represent items of the input
+#     def shingle(self, input):
+#         # some operations on self.M
+#
+#     # for each band, use minhash to find candidate pairs
+#     def minHash(self, funcs):
+#         pairs = []
+#         for i in range(self.b):
+#             for col in self.M[i:(i+1)*self.b]:
+#                 # apply some minhash function
+#                 # assuming col_j and col_k ended in a same bucket
+#                 pairs.append([j,k])
+#
+#         return pairs
+                
