@@ -6,6 +6,7 @@
 # Property: the probability (over all permutations of the rows) that h(C1)=H(C2) for example is the same as Jaccard similarity Sim(C1, C2)
 
 import sys
+import collections
 
 # generate the k-th permutation of sequence [0, 1, ...,n-1]
 # @param n: an int  
@@ -116,9 +117,12 @@ def LSHparam(self, s, b, r):
 #         self.M = [] # signature matrix
 #
 #     # generate shorter signatures to represent items of the input
-#     def shingle(self, input):
+#     def shingling(self, input, ngram):
 #         # some operations on self.M
-#
+#         self.shingles = collections.defaultdict(int)
+#         for i in range(len(input)-ngram):
+#             self.shingles[input[i:i+ngram]] += 1         
+          
 #     # for each band, use minhash to find candidate pairs
 #     def minHash(self, funcs):
 #         pairs = []
