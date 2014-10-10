@@ -23,7 +23,7 @@ class Rtrie:
     # @param key: a string
     # @param val
     # @param d: an int
-    def putHelper(self, node, key, val, d):
+    def _put(self, node, key, val, d):
         if not node:
             node = Node()
         if d==len(key):
@@ -32,7 +32,7 @@ class Rtrie:
             node.val = val
             return node
         c = key[d]
-        node.next[c] = self.putHelper(node.next[c],key, val, d+1) 
+        node.next[c] = self._put(node.next[c],key, val, d+1) 
         return node       
     
     # @param key: a string
@@ -41,22 +41,22 @@ class Rtrie:
         if not val:
             self.delete(key)
         else:
-            self.root = self.putHelper(self.root, key, val, 0)
+            self.root = self._put(self.root, key, val, 0)
     
     # @param node: a Node
     # @param key: a string
     # @param d: an int
-    def getHelper(self,node,key,d):
+    def _get(self,node,key,d):
         if not node:
             return None
         if d==len(key):
             return node 
         c = key[d]
-        return self.getHelper(node.next[c], key, d+1)
+        return self._get(node.next[c], key, d+1)
 
     # @param key: a string
     def get(self, key):
-        node = self.getHelper(self.root, key, 0)
+        node = self._get(self.root, key, 0)
         if not node:
             return None
         return node.val
@@ -69,31 +69,31 @@ class Rtrie:
     def keysWithPrefix(self, prefix):
         res = []
         node = self.get(self.root, prefix, 0)
-        self.collect(node, prefix, res)
+        self._collect(node, prefix, res)
         return res
         
     # @param node: a Node    
     # @param prefix: a string
     # @param res: a list
-    def collect(self, node, prefix, res):
+    def _collect(self, node, prefix, res):
         if not node:
             return 
         if node.val:
             res.append(prefix)
         for c in string.ascii_lowercase:
-            self.collect(node.next[c], prefix+c, res)
+            self._collect(node.next[c], prefix+c, res)
     
     # @param pattern: a string
     def keysThatMatch(self, pattern):
         res = []
-        self.collect2(self.root, '', pattern, res)
+        self._collect2(self.root, '', pattern, res)
         return res
 
     # @param node: a Node    
     # @param prefix: a string
     # @param pattern: a string
     # @param res: a list
-    def collect2(self, node, prefix, pattern, res):
+    def _collect2(self, node, prefix, pattern, res):
         if not node:
             return 
         d = len(prefix)
@@ -104,9 +104,9 @@ class Rtrie:
         c = pattern[d]
         if c=='.':
             for ch in string.ascii_lowercase:
-                self.collect2(node.next[ch], prefix+'ch', res)
+                self._collect2(node.next[ch], prefix+'ch', res)
         else:
-            self.collect2(node.next[c], prefix+'ch', res)
+            self._collect2(node.next[c], prefix+'ch', res)
     
     # @param key: a string    
     def delete(self, key):
@@ -115,7 +115,7 @@ class Rtrie:
     # @param node: a Node    
     # @param key: a string
     # @param d: an int
-    def deleteHelper(self, node, key, d):
+    def _delete(self, node, key, d):
         if not Node:
             return None
         if d==len(key):
@@ -123,7 +123,7 @@ class Rtrie:
                 self.N-=1
         else:
             c = key[d]
-            x.next[c] = self.deleteHelper(x.next[c], key, d+1)
+            x.next[c] = self._delete(x.next[c], key, d+1)
         
         # remove subtrie rooted at node if it is completely empty
         if node.val:
