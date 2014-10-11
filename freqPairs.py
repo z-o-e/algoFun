@@ -6,21 +6,23 @@ import collections
 class FreqPair:
     def __init__(self,pairs, n):
         # keep pairs sorted and suppose the values are hashed to int
-        self.pairs = sorted(self.pairs, key=lambda x:(x[0], x[1]))
+        self.pairs = [tuple(sorted((p[0],p[1]))) for p in pairs] 
         self.n = n
 
     def matrixFind(self):
         # flattened triangular matrix, about 2n^2 bytes in total
-        self.matrix = [0]*n*(n-1)/2
-        for p in pairs:
+        self.matrix = [0]*(self.n*(self.n-1)/2)
+        for p in self.pairs:
             i,j = p[0],p[1]    
-            # simple recipe [i,j] is in position (i-1)*(n-i/2)+j-i of self.matrix
-            self.matrix[(i-1)*(n-i/2)+j-i] += 1
+            # simple recipe [i,j] is in position i*(n-(i+1)/2)+j-i-1 of zero-indexing self.matrix
+            self.matrix[i*(n-(i+1)/2)+j-i-1] += 1
         return self.matrix
 
     def matrixGet(self, i, j):
+        if i>j:
+            i,j = j,i
         try:
-            return self.matrix[(i-1)*(n-i/2)+j-i]
+            return self.matrix[i*(n-(i+1)/2)+j-i-1]
         except:
             return 'triangular matrix not initiated, or either at least one of '+str(i)+' and '+str(j)+' not existant'
     
@@ -32,7 +34,20 @@ class FreqPair:
         return self.table
 
     def tabularGet(self, i, j):
+        if i>j:
+            i,j = j,i
         try:
-            return self.table[[i,j]]
+            return self.table[(i,j)]
         except:
-            return 'no such pair'         
+            return 'no such pair'        
+
+pairs = [[0,1],[0,2],[0,3],[1,2],[1,3],[3,4],[2,1]]
+n = 5
+test = FreqPair(pairs, n)
+test.matrixFind()
+test.matrixGet(0,1)
+test.matrixGet(2,3)
+test.tabularFind()
+test.tabularGet(1,2)
+test.tabularGet(1,4)
+ 
