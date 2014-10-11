@@ -1,6 +1,6 @@
-import collection
+import collections
 
-# two implementations of finding and getting frequent pairs
+# two implementations of finding and getting frequent pairs, useful component for association analysis
 # @param pairs: a list of pair tuples
 # @param n: an int of total number of items
 class FreqPair:
@@ -12,7 +12,7 @@ class FreqPair:
     def matrixFind(self):
         # flattened triangular matrix, about 2n^2 bytes in total
         self.matrix = [0]*n*(n-1)/2
-               for p in pairs:
+        for p in pairs:
             i,j = p[0],p[1]    
             # simple recipe [i,j] is in position (i-1)*(n-i/2)+j-i of self.matrix
             self.matrix[(i-1)*(n-i/2)+j-i] += 1
@@ -22,7 +22,7 @@ class FreqPair:
         try:
             return self.matrix[(i-1)*(n-i/2)+j-i]
         except:
-            return 'triangular matrix not initiated, or either at least one of '+str(i)+' and '+str(j)' not existant'
+            return 'triangular matrix not initiated, or either at least one of '+str(i)+' and '+str(j)+' not existant'
     
     def tabularFind(self):
         # hash table, 12p bytes, where p is the number of pairs, which beats matrixFind if at most 1/3 of the possible pairs occur
