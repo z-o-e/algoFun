@@ -23,7 +23,6 @@ class heap():
     def heapify(self, newElem):
         if not self.heap:
             self.heap = [newElem]
-            return 
         # append to the end
         self.heap.append(newElem)
         i = len(self.heap)-1
@@ -37,7 +36,6 @@ class heap():
             while i>0 and self.heap[i]>self.heap[(i-1)//2]:
                 self.heap[i], self.heap[(i-1)//2] = self.heap[(i-1)//2], self.heap[i]
                 i = (i-1)//2           
-        return
         
     def extractM(self):
         if not self.heap:
