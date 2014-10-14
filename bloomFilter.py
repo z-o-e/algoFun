@@ -40,8 +40,8 @@ class bloomFilter:
         return True
 
     def estimateFP(self,streamSize):
-        zeros = math.exp(len(self.funcs)*streamSize/len(self.bitArray))
-        fp = 1- (1-zeros)**5
+        zeros = math.exp(-len(self.funcs)*streamSize/len(self.bitArray))
+        fp =  (1-zeros)**(len(self.funcs))
         return fp        
 
 
