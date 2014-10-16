@@ -5,7 +5,7 @@
 # @return a float
 def area(a,b,c):
     # based on Heron's formula:
-    return abs(a[0]*(b[1]-c[1])+b[0]*(c[1]-a[a])+c[0](a[1]-b[1]))/2.
+    return abs(a[0]*(b[1]-c[1])+b[0]*(c[1]-a[1])+c[0](a[1]-b[1]))/2.
 
 # @param a,b,c, three (x, y) tuples of points
 def isInside(a,b,c, newElem):
